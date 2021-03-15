@@ -1,5 +1,4 @@
 #! /usr/bin/env python3
-from dataclasses import dataclass
 
 class Sudoku:
     def __init__(self, file):
@@ -70,7 +69,7 @@ class Sudoku:
             return True
         return False
 
-    def try_solve(self, iterations=5000):
+    def try_solve(self, iterations=81):
         for i in range(iterations):
             for row in range(9):
                 for col in range(9):
