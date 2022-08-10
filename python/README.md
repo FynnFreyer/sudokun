@@ -23,5 +23,7 @@ Please spare yourself doing the pretty print on a file with thousands or million
 ## TODOs
 
 - add tests
-- garbage collection (e.g. del all the dicts once they are not needed anymore)
+- garbage collection 
+  - e.g. del all the dicts once they are not needed anymore
+  - or maybe rather just call gc.collect() every x iterations
 - supplement the algorithm with backtracking
