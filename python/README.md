@@ -23,7 +23,10 @@ Please spare yourself doing the pretty print on a file with thousands or million
 ## TODOs
 
 - add tests
-- garbage collection 
+- garbage collection
   - e.g. del all the dicts once they are not needed anymore
   - or maybe rather just call gc.collect() every x iterations
+  - actually because of pythons reference counting gc scheme
+    none of this should be needed. better search for circular 
+    references, that prevent proper garbage collection instead
 - supplement the algorithm with backtracking
