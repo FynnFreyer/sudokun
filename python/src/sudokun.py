@@ -261,12 +261,17 @@ def solve(sudoku: dict[tuple[int, int], int]) -> dict[tuple[int, int], int]:
     return sudoku
 
 
+def crunch(sudokus: list[dict[tuple[int, int], int]]) -> list[dict[tuple[int, int], int]]:
+    with Pool() as p:
+        solved_sudokus = p.map(solve, sudokus)
+    return solved_sudokus
+
+
 def main():
     args = parse_args()
     sudokus = args.sudoku_file
 
-    with Pool() as p:
-        solved_sudokus = p.map(solve, sudokus)
+    solved_sudokus = crunch(sudokus)
 
     for sudoku in solved_sudokus:
         if args.pretty:
