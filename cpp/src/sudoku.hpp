@@ -3,22 +3,73 @@
 
 #include <vector>
 #include <string>
+#include <bitset>
+#include <tuple>
+
+struct cell_address {
+    cell_address(unsigned short row, unsigned short col) : row(row), col(col)  {}
+
+    unsigned short row;
+    unsigned short col;
+
+    bool operator < (const cell_address &other) {
+        if (row < other.row) return true;
+        if (row == other.row) {
+            if (col < other.col) return true;
+        }
+        return false;
+    }
+
+    friend inline bool operator <  (const cell_address& lhs, const cell_address& rhs) {
+        return std::tie(lhs.row, lhs.col) < std::tie(rhs.row, rhs.col);
+    }
+
+    friend inline bool operator >  (const cell_address& lhs, const cell_address& rhs) { return rhs < lhs; }
+    friend inline bool operator <= (const cell_address& lhs, const cell_address& rhs) { return !(lhs > rhs); }
+    friend inline bool operator >= (const cell_address& lhs, const cell_address& rhs) { return !(lhs < rhs); }
+
+    friend inline bool operator == (const cell_address& lhs, const cell_address& rhs) {
+        return std::tie(lhs.row, lhs.col) == std::tie(rhs.row, rhs.col);
+    }
+
+    friend inline bool operator != (const cell_address& lhs, const cell_address& rhs) { return !(lhs == rhs); }
+
+};
 
 class Sudoku {
-    std::vector<int> candidates[9][9];
-    int data[9][9];
+    static const std::string VALID_SYMBOLS;
+    static const int ADDRESS_RANGE[];
+    std::bitset<9> data[9][9];
 
-    std::vector<int> get_row_values(int row_index);
-    std::vector<int> get_col_values(int col_index);
-    std::vector<int> get_box_values(int x, int y);
+    std::vector<cell_address> get_unknown_addresses();
 
-    std::vector<int> get_row_candidates(int row_index);
-    std::vector<int> get_col_candidates(int col_index);
-    std::vector<int> get_box_candidates(int x, int y);
+    static std::vector<cell_address> get_all_addresses();
+    static std::vector<cell_address> get_row_addresses(int row);
+    static std::vector<cell_address> get_col_addresses(int col);
+    static std::vector<cell_address> get_box_addresses(int row, int col);
+    static std::vector<cell_address> get_box_addresses(cell_address address);
+    static std::vector<cell_address> get_codependent_addresses(int row, int col);
+    static std::vector<cell_address> get_codependent_addresses(cell_address address);
+
+    std::vector<int> get_candidates(int row, int col);
+    std::vector<int> get_candidates(cell_address address);
+
+    bool update_candidates(int row, int col);
+    bool update_candidates(cell_address address);
+
+    int get_value(int row, int col);
+    int get_value(cell_address address);
+
+    bool is_known(int row, int col) {return data[row][col].count() == 1;}
+    bool is_known(cell_address address) {return this->is_known(address.row, address.col);}
 
 public:
-    Sudoku(std::string file_path);
+    explicit Sudoku(const std::string& sudoku_string);
+    static std::vector<Sudoku> from_file(const std::string& file_path);
     void solve();
+
+    std::string to_string();
+    std::string to_pretty_string();
 };
 
 #endif // SUDOKU_HPP

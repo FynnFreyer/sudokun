@@ -1,5 +1,7 @@
 #include <string>
 #include <vector>
+#include <fstream>
+#include <iostream>
 
 #include "utils.hpp"
 
@@ -24,3 +26,22 @@ vector<string> split(string s, string sep, bool keep_sep) {
 
     return split_list;
 }
+
+std::vector<std::string> read_sudoku_file(const std::string& file) {
+    vector<string> lines;
+    string line;
+    ifstream input_file_stream(file);
+    if (input_file_stream.is_open()) {
+        while (getline(input_file_stream, line)) {
+            // filter empty lines and comments
+            if (line != "" && line[0] != '#') {
+                lines.push_back(line);
+            }
+        }
+        input_file_stream.close();
+    }
+    else cout << "Unable to open file " << file;
+
+    return lines;
+}
+
