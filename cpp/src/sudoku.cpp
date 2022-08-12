@@ -226,5 +226,31 @@ std::string Sudoku::to_string() {
 }
 
 std::string Sudoku::to_pretty_string() {
-    return std::string();
+    int range[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    string pretty_string = "";
+
+    string row_delineator_thin = "\n---+---+---++---+---+---++---+---+---\n";
+    string row_delineator_thick = "\n===+===+===++===+===+===++===+===+===\n";
+
+    string col_delineator_thin = "|";
+    string col_delineator_thick = "||";
+
+    for (int row: range) {
+        for (int col: range) {
+            bool last_col = col == 8;
+            bool col_divisible_by_three = (col + 1) % 3 == 0;
+
+            string col_delineator = last_col ? "" : col_divisible_by_three ? col_delineator_thick : col_delineator_thin;
+
+            pretty_string += " " + std::to_string(get_value(row, col)) + " " + col_delineator;
+        }
+        bool last_row = row == 8;
+        bool row_divisible_by_three = (row + 1) % 3 == 0;
+
+        string row_delineator = last_row ? "" : row_divisible_by_three ? row_delineator_thick : row_delineator_thin;
+
+        pretty_string += row_delineator;
+    }
+    return pretty_string + '\n';
 }
