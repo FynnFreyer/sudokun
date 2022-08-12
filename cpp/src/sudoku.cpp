@@ -75,11 +75,7 @@ std::vector<cell_address> Sudoku::get_box_addresses(int row, int col) {
 
     vector<cell_address> addresses;
 
-    for (int row: rows) {
-        for (int col: cols) {
-            addresses.emplace_back(row, col);
-        }
-    }
+    for (int row: rows) for (int col: cols) addresses.emplace_back(row, col);
 
     return addresses;
 }
