@@ -33,10 +33,7 @@ Sudoku::Sudoku(const string &sudoku_string) {
 
         // find out, where we are
         div_t pos = div(i, 9);
-
-        int row, col;
-        row = pos.quot;
-        col = pos.rem;
+        int row = pos.quot, col = pos.rem;
 
         // if we don't know the cell value (indicated by a zero),
         // we set all candidate bits, otherwise only the correct bit
@@ -142,48 +139,59 @@ int Sudoku::get_value(cell_address address) {
 }
 
 bool Sudoku::update_candidates(int row, int col) {
-    // we are interested in knowing whether any changes were done
+    // we are interested in knowing whether any changes were made
     bool updated = false;
+    int foo = row;
 
+    // get all cells that influence, the possible values of our cell
     vector<cell_address> codependents = get_codependent_addresses(row, col);
     // if we have a candidate, that can only fit in this cell, it is the correct value
     for (cell_address c: codependents) {
-        // if a value is already used in one of the codependent cells
-        // it can't be valid in this cell, so we use the inverse of
-        // the codependent bitset as an and bitmask to exclude those
+        // skip the current cell itself, would make the differences we're looking for meaningless
+        if (c == cell_address(row, col)) continue;
+        // if a value is already used in one of the codependent cells it can't be valid
+        // therefore we check whether the value of the comparison cell is known
         if (is_known(c)) {
-            bitset inverse = ~data[c.row][c.col];
-            bitset common = data[row][col] & inverse;
-            if (common != data[row][col]) {
-                data[row][col] = common;
+            // the inverse of the codependent bitset leaves all those candidates, that are not excluded yet
+            bitset not_excluded = ~data[c.row][c.col];
+            // if we use it as a bitmask we can exclude the taken values with a bitwise and
+            bitset still_possible = data[row][col] & not_excluded;
+            // if there is a difference between what we have in our candidates, and what's possible
+            if (data[row][col] != still_possible) {
+                // we update accordingly and remember, that we did an update
+                data[row][col] &= not_excluded;
                 updated = true;
             }
         }
     }
 
+
+    // if we did not yet find a solution for the current cell, then we try a different strategy
     if (!is_known(row, col)) {
-        vector<tuple<vector<cell_address>, bitset<9>>> influences = {
-                make_tuple(get_row_addresses(row), bitset<9>(0)),
-                make_tuple(get_col_addresses(col), bitset<9>(0)),
-                make_tuple(get_box_addresses(row, col), bitset<9>(0))
+        // we have to check for the contents along the same 'axis of influence', e.g. row/col/box seperately!
+        vector<vector<cell_address>> influences = {
+                get_row_addresses(row),
+                get_col_addresses(col),
+                get_box_addresses(row, col)
         };
 
-        for (tuple<vector<cell_address>, bitset<9>> influence: influences) {
-            // get all bits that are set along the same 'axis of influence', e.g. row/col/box
-            for (cell_address c: get<0>(influence)) {
-                // skip the relevant cell itself
+        for (vector<cell_address> influence: influences) {
+            // get all bits that are set in the same row/col/box,
+            // e.g. all possible candidates
+            bitset<9> candidates;
+            for (cell_address c: influence) {
+                // skip the current cell itself, would make the differences we're looking for meaningless
                 if (c == cell_address(row, col)) continue;
-                get<1>(influence) |= data[c.row][c.col];
+                candidates |= data[c.row][c.col];
             }
 
             // we check for the bits, that could only possibly be valid here
-            // count should in theory never be something else than one or zero,
-            // so optimizing with !only_possible_here.none() might be possible?
-            // but I'm scared to use it, because bad logic ate my dog and left
-            bitset only_possible_here = ~get<1>(influence) & data[row][col];
-            if (only_possible_here.count() == 1 && only_possible_here != data[row][col]) {
-                // if it's only passible here, we found our value, set it, remember update, and leave the loop
-                data[col][row] = only_possible_here;
+            // count should in theory never be something else than one or zero
+            bitset only_possible_here = ~candidates & data[row][col];
+            // if we found a value that can only fit here
+            if (only_possible_here.count() == 1) {
+                // we found our value, so we set it, remember we did an update, and leave the loop
+                data[row][col] &= only_possible_here;
                 updated = true;
                 break;
             }
@@ -200,11 +208,12 @@ bool Sudoku::update_candidates(cell_address address) {
 void Sudoku::solve() {
     vector<cell_address> unknown_cells;
     do {
-         unknown_cells = get_unknown_addresses();
+        unknown_cells = get_unknown_addresses();
 
         bool updated = false;
-        for (cell_address c: unknown_cells) updated |= update_candidates(c);
-        // we were not able to do any updates, so we abort
+        for (cell_address c: unknown_cells)
+            updated |= update_candidates(c);
+        // we were not able to do any further updates, so we abort
         if (!updated) break;
 
     } while (unknown_cells.size());
