@@ -23,7 +23,7 @@ po::variables_map parse_args(int argc, char** argv) {
     po::notify(var_map);
 
     if (var_map.count("help")) {
-        cout << "Usage: " << argv[0] << " [options] <input>\n";
+        cout << "Usage: " << argv[0] << " [options] <input>\n\n";
         cout << opts_desc << "\n";
         throw 1;
     }
