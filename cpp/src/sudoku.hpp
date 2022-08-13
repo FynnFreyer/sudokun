@@ -57,7 +57,6 @@ class Sudoku {
 
 public:
     explicit Sudoku(const std::string& sudoku_string);
-    static std::vector<Sudoku> from_file(const std::string& file_path);
     void solve();
 
     std::string to_string();

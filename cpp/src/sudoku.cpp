@@ -9,16 +9,6 @@ using namespace std;
 const string Sudoku::VALID_SYMBOLS = "0123456789";
 const int Sudoku::ADDRESS_RANGE[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
-vector<Sudoku> Sudoku::from_file(const string& file_path) {
-    vector<string> sudoku_strings = read_sudoku_file(file_path);
-
-    vector<Sudoku> sudokus;
-    for (const string& sudoku_string: sudoku_strings)
-        sudokus.emplace_back(sudoku_string);
-
-    return sudokus;
-}
-
 Sudoku::Sudoku(const string &sudoku_string) {
     for (int i = 0; i < sudoku_string.size(); i++) {
         char symbol = sudoku_string[i];
