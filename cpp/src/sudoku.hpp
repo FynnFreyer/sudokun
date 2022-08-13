@@ -7,18 +7,10 @@
 #include <tuple>
 
 struct cell_address {
-    cell_address(unsigned short row, unsigned short col) : row(row), col(col)  {}
+    cell_address(unsigned char row, unsigned char col) : row(row), col(col)  {}
 
-    unsigned short row;
-    unsigned short col;
-
-    bool operator < (const cell_address &other) {
-        if (row < other.row) return true;
-        if (row == other.row) {
-            if (col < other.col) return true;
-        }
-        return false;
-    }
+    unsigned char row;
+    unsigned char col;
 
     friend inline bool operator <  (const cell_address& lhs, const cell_address& rhs) {
         return std::tie(lhs.row, lhs.col) < std::tie(rhs.row, rhs.col);
