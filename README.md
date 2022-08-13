@@ -32,7 +32,7 @@ An interesting, albeit daunting solution would be Knuths [Algorithm X](https://w
 Sudokus are input via a plain text file (c.f. Testing), whose path is passed as the first positional argument when running the program.
 Every line has to have exactly 81 (9 x 9) charcters, one corresponding to each cell.
 Ordering is row by row, from the top left to the bottom right.
-Known cells get their number, and unknown cells get a zero (`0`), or a dot (`.`).
+Known cells get their respective numbers (`1` through `9`), and unknown cells get a zero (`0`).
 Empty lines, and lines starting with a hashbang (`#`) are ignored.
 
 # Implementations
