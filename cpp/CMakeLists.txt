@@ -9,5 +9,5 @@ FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
 
 add_executable(${PROJECT_NAME} src/utils.cpp src/sudoku.cpp src/main.cpp)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} LINK_PUBLIC ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} LINK_PUBLIC ${Boost_LIBRARIES} pthread)
 
