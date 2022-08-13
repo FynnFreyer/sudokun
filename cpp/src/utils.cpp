@@ -5,11 +5,12 @@
 #include <filesystem>
 #include <boost/program_options.hpp>
 
+
 #include "utils.hpp"
 
 using namespace std;
 
-void print_usage(char* name, po::options_description opts_desc) {
+void print_usage(char* name, const po::options_description& opts_desc) {
     cout << "Usage: " << name << " [options] <input>\n\n";
     cout << opts_desc << "\n";
 }
@@ -54,11 +55,11 @@ po::variables_map parse_args(int argc, char** argv) {
         throw 3;
     }
 
-    namespace fs = std::filesystem;
+    namespace fs = filesystem;
     string file_path_string = input_vector[0];
     fs::path file_path(file_path_string);
     if (!fs::exists(file_path)) {
-        std::cout << "The file " << file_path_string << " does not exist, or cannot be read!\n" << endl;
+       cout << "The file " << file_path_string << " does not exist, or cannot be read!\n" << endl;
         print_usage(argv[0], opts_desc_generic);
         throw 4;
     }
@@ -71,8 +72,8 @@ vector<string> split(string s, string sep, bool keep_sep) {
     vector<string> split_list;
 
     size_t pos = 0;
-    std::string token;
-    while ((pos = s.find(sep)) != std::string::npos) {
+    string token;
+    while ((pos = s.find(sep)) != string::npos) {
         size_t eot = keep_sep ? pos + sep.length() : pos;  // end of token
 
         token = s.substr(0, eot);
@@ -85,21 +86,23 @@ vector<string> split(string s, string sep, bool keep_sep) {
     return split_list;
 }
 
-std::vector<std::string> read_sudoku_file(const std::string& file) {
-    vector<string> lines;
+
+vector<work_unit> read_sudoku_file(const string& file) {
+    vector<work_unit> units;
     string line;
     ifstream input_file_stream(file);
     if (input_file_stream.is_open()) {
+        int i = 0;
         while (getline(input_file_stream, line)) {
             // filter empty lines and comments
-            if (line != "" && line[0] != '#') {
-                lines.push_back(line);
+            if (!(line.empty() || line.starts_with('#'))) {
+                work_unit unit = work_unit(i++, line);
+                units.push_back(unit);
             }
         }
         input_file_stream.close();
     }
     else cout << "Unable to open file " << file;
 
-    return lines;
+    return units;
 }
-
