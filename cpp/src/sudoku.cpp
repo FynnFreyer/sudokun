@@ -150,7 +150,6 @@ bool Sudoku::update_candidates(int row, int col) {
         }
     }
 
-
     // if we did not yet find a solution for the current cell, then we try a different strategy
     if (!is_known(row, col)) {
         // we have to check for the contents along the same 'axis of influence', e.g. row/col/box seperately!
@@ -210,16 +209,18 @@ std::string Sudoku::to_string() {
     return buf.str();
 }
 
-std::string Sudoku::to_pretty_string() {
+std::string Sudoku::to_pretty_string(string sudoku) {
     int range[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
-    string pretty_string = "";
+    string pretty_string;
 
     string row_delineator_thin = "\n---+---+---++---+---+---++---+---+---\n";
     string row_delineator_thick = "\n===+===+===++===+===+===++===+===+===\n";
 
     string col_delineator_thin = "|";
     string col_delineator_thick = "||";
+
+    string whitespace = "  ";
 
     for (int row: range) {
         for (int col: range) {
@@ -228,7 +229,11 @@ std::string Sudoku::to_pretty_string() {
 
             string col_delineator = last_col ? "" : col_divisible_by_three ? col_delineator_thick : col_delineator_thin;
 
-            pretty_string += " " + std::to_string(get_value(row, col)) + " " + col_delineator;
+            int pos = (row * 9) + col;
+            char ch = sudoku[pos];
+            string num_str = whitespace.insert(1, 1, ch);
+
+            pretty_string += num_str + col_delineator;
         }
         bool last_row = row == 8;
         bool row_divisible_by_three = (row + 1) % 3 == 0;

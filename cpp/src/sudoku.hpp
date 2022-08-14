@@ -60,7 +60,7 @@ public:
     void solve();
 
     std::string to_string();
-    std::string to_pretty_string();
+    static std::string to_pretty_string(std::string sudoku);
 };
 
 #endif // SUDOKU_HPP

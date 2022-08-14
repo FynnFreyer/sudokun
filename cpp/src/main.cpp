@@ -22,8 +22,7 @@ int main(int argc, char** argv) {
 
     for (const string& s: solved) {
         if (var_map.count("pretty")) {
-            auto su = Sudoku(s);
-            cout << su.to_pretty_string() << endl;
+            cout << Sudoku::to_pretty_string(s) << endl;
         } else {
             cout << s << endl;
         }
