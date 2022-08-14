@@ -16,8 +16,10 @@ we pass a reference to that vector to our threads
 
 ## Building
 
-This program depends on the boost library `program_options` to parse command line options and generate the help text.
+This program depends on the [boost library](https://www.boost.org/), specifically the `program_options` component.
+It's used to parse command line options and generate the help text, and I can't be bothered to roll my own version.
 Install boost with `sudo apt install boost-dev` on Debian derived systems and `sudo dnf install boost-devel` on RHEL derived systems.
+They provide links to binary downloads for Windows on their website I think.
 
 You can build the project from within the [`cpp`](.) directory with the following commands:
 
@@ -41,7 +43,7 @@ Get additional help, and display usage information with `sudokun -h`
 ## Performance
 
 On my laptop with an eight core AMD Ryzen 7 PRO 4750U and 32 GB of RAM,
-I can run [`quizzes.sudoku`](../data/quizzes.sudoku) in ca. 30 seconds.
+I can run [`quizzes.sudoku`](../data/quizzes.sudoku) (one million lines) in ca. 30 seconds.
 
 Testing performance with
 
@@ -56,10 +58,6 @@ But it's still so embarrassing, that I'm considering reimplementing the Python v
 
 # TODOs
 
-- extract multithreading logic (do_work and crunch)
-  - either to seperate module
-  - or to utils (difficult if sudoku needs to include utils,   
-    but does it really after deleting from_file?)
 - make pretty_print static and have it take a string.
 - documentation 
   - inline
