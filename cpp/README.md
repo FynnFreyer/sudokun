@@ -24,7 +24,7 @@ They provide links to binary downloads for Windows on their website I think.
 You can build the project from within the [`cpp`](.) directory with the following commands:
 
     mkdir build; cd build
-    cmake -DCMAKE_CXX_FLAGS="-O3" ..
+    cmake -DCMAKE_BUILD_TYPE=Release ..
     cmake --build .
 
 
