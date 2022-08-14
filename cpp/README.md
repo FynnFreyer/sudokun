@@ -58,7 +58,6 @@ But it's still so embarrassing, that I'm considering reimplementing the Python v
 
 # TODOs
 
-- make pretty_print static and have it take a string.
 - documentation 
   - inline
   - docstrings (doxygen?)
