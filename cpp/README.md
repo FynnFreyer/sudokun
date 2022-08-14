@@ -58,6 +58,12 @@ But it's still so embarrassing, that I'm considering reimplementing the Python v
 
 # TODOs
 
+- clean up some unused functions
+  - get_candidates?
+    - maybe make it inline, change return type to bitset,  
+      and replace all data[row][col] calls with that for readability
+  - some of the get_xxx_addresses funcs
+    - codependents?
 - documentation 
   - inline
   - docstrings (doxygen?)
