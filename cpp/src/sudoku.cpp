@@ -101,7 +101,7 @@ std::vector<int> Sudoku::get_candidates(int row, int col) {
     return candidates;
 }
 
-std::vector<int> Sudoku::get_candidates(cell_address address) {
+[[maybe_unused]] std::vector<int> Sudoku::get_candidates(cell_address address) {
     return get_candidates(address.row, address.col);
 }
 
@@ -126,7 +126,6 @@ int Sudoku::get_value(cell_address address) {
 bool Sudoku::update_candidates(int row, int col) {
     // we are interested in knowing whether any changes were made
     bool updated = false;
-    int foo = row;
 
     // get all cells that influence, the possible values of our cell
     vector<cell_address> codependents = get_codependent_addresses(row, col);
@@ -152,14 +151,14 @@ bool Sudoku::update_candidates(int row, int col) {
 
     // if we did not yet find a solution for the current cell, then we try a different strategy
     if (!is_known(row, col)) {
-        // we have to check for the contents along the same 'axis of influence', e.g. row/col/box seperately!
+        // we have to check for the contents along the same 'axis of influence', e.g. row/col/box separately!
         vector<vector<cell_address>> influences = {
                 get_row_addresses(row),
                 get_col_addresses(col),
                 get_box_addresses(row, col)
         };
 
-        for (vector<cell_address> influence: influences) {
+        for (const vector<cell_address>& influence: influences) {
             // get all bits that are set in the same row/col/box,
             // e.g. all possible candidates
             bitset<9> candidates;
@@ -200,7 +199,7 @@ void Sudoku::solve() {
         // we were not able to do any further updates, so we abort
         if (!updated) break;
 
-    } while (unknown_cells.size());
+    } while (!unknown_cells.empty());
 }
 
 std::string Sudoku::to_string() {

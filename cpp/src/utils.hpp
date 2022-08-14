@@ -9,7 +9,6 @@
 namespace po = boost::program_options;
 
 po::variables_map parse_args(int argc, char** argv);
-std::vector<std::string> split(std::string s, std::string sep, bool keep_sep = false);
 
 struct work_unit {
     work_unit(int index, std::string sudoku): index(index), sudoku(std::move(sudoku)) {};
