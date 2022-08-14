@@ -29,12 +29,5 @@ int main(int argc, char** argv) {
         }
     }
 
-//    // single threaded
-//    for (work_unit unit: units) {
-//        Sudoku sudoku(unit.sudoku);
-//        sudoku.solve();
-//        cout << sudoku.to_string() << endl;
-//    }
-
     return 0;
 }
