@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "sudoku.hpp"
-#include "utils.hpp"
 
 using namespace std;
 
