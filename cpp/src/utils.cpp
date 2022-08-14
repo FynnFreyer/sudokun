@@ -3,10 +3,15 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <thread>
+#include <mutex>
+
+
+
 #include <boost/program_options.hpp>
 
-
 #include "utils.hpp"
+#include "sudoku.hpp"
 
 using namespace std;
 
@@ -67,36 +72,18 @@ po::variables_map parse_args(int argc, char** argv) {
     return var_map;
 }
 
-vector<string> split(string s, string sep, bool keep_sep) {
-    // adapted from https://stackoverflow.com/a/14266139
-    vector<string> split_list;
-
-    size_t pos = 0;
-    string token;
-    while ((pos = s.find(sep)) != string::npos) {
-        size_t eot = keep_sep ? pos + sep.length() : pos;  // end of token
-
-        token = s.substr(0, eot);
-        split_list.push_back(token);
-
-        s.erase(0, pos + sep.length());
-    }
-    split_list.push_back(s);
-
-    return split_list;
-}
-
-
 vector<work_unit> read_sudoku_file(const string& file) {
     vector<work_unit> units;
-    string line;
     ifstream input_file_stream(file);
     if (input_file_stream.is_open()) {
-        int i = 0;
+        int i = 0;  // index var for the work_unit
+        string line;
         while (getline(input_file_stream, line)) {
             // filter empty lines and comments
             if (!(line.empty() || line.starts_with('#'))) {
+                // create a work_unit (and increment the index)
                 work_unit unit = work_unit(i++, line);
+                // add it to the units vector
                 units.push_back(unit);
             }
         }
@@ -105,4 +92,59 @@ vector<work_unit> read_sudoku_file(const string& file) {
     else cout << "Unable to open file " << file;
 
     return units;
+}
+
+// our mutex to control read (and pop) access to the work_unit vector
+mutex read_mtx;
+
+void do_work(vector<work_unit>& units, string solved[]) {
+    // we need to initialize the unit before going into the critical section, or it goes out of scope
+    work_unit unit = work_unit(-1, "");
+
+    do {
+        { // critical section, reading from the vector
+            lock_guard<mutex> lock(read_mtx);
+            if (units.empty()) break;
+            unit = units.back();
+            units.pop_back();
+        }
+
+        // read unit string into sudoku and solve it
+        Sudoku sudoku(unit.sudoku);
+        sudoku.solve();
+
+        // write the solution to the array of solved sudokus
+        string solution = sudoku.to_string();
+        solved[unit.index] = solution;
+
+    } while (true);
+}
+vector<string> crunch(vector<work_unit>& units) {
+    // because the threads pop from the vector, we need to remember the size at the start
+    int unit_total = units.size();
+    // get an array of strings, where the threads can write out the solutions
+    auto* solved = new string[unit_total];
+
+    // get the number of cores
+    unsigned int cpus = thread::hardware_concurrency();
+    if (cpus == 0) cpus++;  // seems like no concurrency supported, so only one thread
+    const unsigned int thread_count = cpus;  // make it a const, probably unnecessary
+
+    // our thread pool
+    vector<thread> threads;
+    for (int i = 0; i < thread_count; i++) {
+        // instantiate our threads
+        threads.emplace_back(do_work, ref(units), ref(solved));
+    }
+
+    // join the threads
+    for (int i = 0; i < thread_count; i++) {
+        if (threads[i].joinable()) {
+            threads[i].join();
+        }
+    }
+
+    // take the solved sudoku array, and turn it into a vector (fewer issues with pointer decay, and generally easier handling)
+    vector<string> solved_vector = vector(solved, solved + unit_total);
+    return solved_vector;
 }

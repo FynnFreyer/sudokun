@@ -19,6 +19,7 @@ struct work_unit {
 };
 
 std::vector<work_unit> read_sudoku_file(const std::string& file);
+std::vector<std::string> crunch(std::vector<work_unit>& units);
 
 
 #endif // UTILS_HPP
