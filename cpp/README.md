@@ -64,10 +64,22 @@ But it's still so embarrassing, that I'm considering reimplementing the Python v
           and replace all data[row][col] calls with that for readability
     - some of the get_xxx_addresses funcs
         - codependents?
+- we could precompute the set of relevant addresses for each cell in the beginning for a marginal performance improvement
 - documentation
     - inline
     - docstrings (doxygen?)
 - finish up readme
     - approach
 - implement tests
+- guess, when you don't get improvements from logical closures
+  - we notice when no further improvement is made, by checking the updated var that's no problem
+  - we have to remember our active guesses (maybe a stack)
+  - we should guess those cells first, that have the least uncertainty (lowest number of possible candidates)
+  - after that, logical deduction should take over again (NEEDS TO BE UNWOUND TOO!)
+  - when a prior guess makes the sudoku intractable, we need to unwind the stack, (and all logical deduction depending on it) and make another guess
+    - what does intractable mean? no possible candidates 
+    - we need to remember "burned" guesses, that made the sudoku intractable
+    - intractability could be communicated via a thrown exception in the get_candidates function (or somewhere else)
+
+
 
