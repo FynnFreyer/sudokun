@@ -10,7 +10,7 @@ The data is represented internally as a 9x9 matrix of length 9 bitsets.
 Every cell in the matrix corresponds to a cell in the sudoku.
 Every bit in a bitset corresponds to a number, that is a possible candidate, when set, or not, when not set.
 
-we read the sudoku file into a vector of work_unit 
+we read the sudoku file into a vector of work_unit
 we pass a reference to that vector to our threads
 
 
@@ -53,21 +53,21 @@ results in `1 loop, best of 5: 30.9 sec per loop`.
 
 That is sooo much better than the Python version.
 This might be obvious, because interpreted vs. compiled and all that.
-But it's still so embarrassing, that I'm considering reimplementing the Python version with Numpy or something. 
+But it's still so embarrassing, that I'm considering reimplementing the Python version with Numpy or something.
 
 
 # TODOs
 
 - clean up some unused functions
-  - get_candidates?
-    - maybe make it inline, change return type to bitset,  
-      and replace all data[row][col] calls with that for readability
-  - some of the get_xxx_addresses funcs
-    - codependents?
-- documentation 
-  - inline
-  - docstrings (doxygen?)
+    - get_candidates?
+        - maybe make it inline, change return type to bitset,  
+          and replace all data[row][col] calls with that for readability
+    - some of the get_xxx_addresses funcs
+        - codependents?
+- documentation
+    - inline
+    - docstrings (doxygen?)
 - finish up readme
-  - approach
+    - approach
 - implement tests
 

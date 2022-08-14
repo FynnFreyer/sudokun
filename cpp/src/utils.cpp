@@ -7,7 +7,6 @@
 #include <mutex>
 
 
-
 #include <boost/program_options.hpp>
 
 #include "utils.hpp"
@@ -64,7 +63,7 @@ po::variables_map parse_args(int argc, char** argv) {
     string file_path_string = input_vector[0];
     fs::path file_path(file_path_string);
     if (!fs::exists(file_path)) {
-       cout << "The file " << file_path_string << " does not exist, or cannot be read!\n" << endl;
+        cout << "The file " << file_path_string << " does not exist, or cannot be read!\n" << endl;
         print_usage(argv[0], opts_desc_generic);
         throw 4;
     }
@@ -88,8 +87,7 @@ vector<work_unit> read_sudoku_file(const string& file) {
             }
         }
         input_file_stream.close();
-    }
-    else cout << "Unable to open file " << file;
+    } else cout << "Unable to open file " << file;
 
     return units;
 }

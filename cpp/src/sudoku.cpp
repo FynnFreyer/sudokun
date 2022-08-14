@@ -96,7 +96,7 @@ std::vector<cell_address> Sudoku::get_codependent_addresses(cell_address address
 std::vector<int> Sudoku::get_candidates(int row, int col) {
     vector<int> candidates;
 
-    for (int i=0; i < data[row][col].size(); i++) if (data[row][col].test(i)) candidates.push_back(i+1);
+    for (int i = 0; i < data[row][col].size(); i++) if (data[row][col].test(i)) candidates.push_back(i + 1);
 
     return candidates;
 }
@@ -158,7 +158,7 @@ bool Sudoku::update_candidates(int row, int col) {
                 get_box_addresses(row, col)
         };
 
-        for (const vector<cell_address>& influence: influences) {
+        for (const vector<cell_address> &influence: influences) {
             // get all bits that are set in the same row/col/box,
             // e.g. all possible candidates
             bitset<9> candidates;
@@ -209,36 +209,40 @@ std::string Sudoku::to_string() {
 }
 
 std::string Sudoku::to_pretty_string(string sudoku) {
-    int range[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-
     string pretty_string;
 
+    // define some nice looking delineators
     string row_delineator_thin = "\n---+---+---++---+---+---++---+---+---\n";
     string row_delineator_thick = "\n===+===+===++===+===+===++===+===+===\n";
 
     string col_delineator_thin = "|";
     string col_delineator_thick = "||";
 
-    string whitespace = "  ";
-
-    for (int row: range) {
-        for (int col: range) {
+    // for all rows and cols
+    for (int row: ADDRESS_RANGE) {
+        for (int col: ADDRESS_RANGE) { // for each cell
+            // determine the appropriate column delineator
             bool last_col = col == 8;
             bool col_divisible_by_three = (col + 1) % 3 == 0;
 
             string col_delineator = last_col ? "" : col_divisible_by_three ? col_delineator_thick : col_delineator_thin;
 
+            // get the character from the sudoku string
             int pos = (row * 9) + col;
             char ch = sudoku[pos];
+
+            // pad it with whitespace and turn it into a string
+            string whitespace = "  ";
             string num_str = whitespace.insert(1, 1, ch);
 
+            // add the number string and the column delineator
             pretty_string += num_str + col_delineator;
-        }
+        } // at the end of the row
+        // determine the appropriate row delineator and add it to the string
         bool last_row = row == 8;
         bool row_divisible_by_three = (row + 1) % 3 == 0;
 
         string row_delineator = last_row ? "" : row_divisible_by_three ? row_delineator_thick : row_delineator_thin;
-
         pretty_string += row_delineator;
     }
     return pretty_string + '\n';

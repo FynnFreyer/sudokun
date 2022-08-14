@@ -1,8 +1,8 @@
 import unittest
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
+class TestAddressFunctions(unittest.TestCase):
+    def test_get_row_address_tuples(self):
         self.assertEqual(True, False)  # add assertion here
 
 

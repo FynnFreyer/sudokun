@@ -7,7 +7,7 @@
 #include <tuple>
 
 struct cell_address {
-    cell_address(unsigned char row, unsigned char col) : row(row), col(col)  {}
+    cell_address(unsigned char row, unsigned char col) : row(row), col(col) {}
 
     unsigned char row;
     unsigned char col;
@@ -53,8 +53,8 @@ class Sudoku {
     int get_value(int row, int col);
     int get_value(cell_address address);
 
-    bool is_known(int row, int col) {return data[row][col].count() == 1;}
-    bool is_known(cell_address address) {return this->is_known(address.row, address.col);}
+    bool is_known(int row, int col) { return data[row][col].count() == 1; }
+    bool is_known(cell_address address) { return this->is_known(address.row, address.col); }
 
 public:
     explicit Sudoku(const std::string& sudoku_string);

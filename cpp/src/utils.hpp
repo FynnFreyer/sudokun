@@ -11,7 +11,7 @@ namespace po = boost::program_options;
 po::variables_map parse_args(int argc, char** argv);
 
 struct work_unit {
-    work_unit(int index, std::string sudoku): index(index), sudoku(std::move(sudoku)) {};
+    work_unit(int index, std::string sudoku) : index(index), sudoku(std::move(sudoku)) {};
 
     int index;
     std::string sudoku;
