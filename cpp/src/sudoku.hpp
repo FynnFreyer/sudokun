@@ -43,9 +43,8 @@ class Sudoku {
     static std::vector<cell_address> get_codependent_addresses(int row, int col);
     static std::vector<cell_address> get_codependent_addresses(cell_address address);
 
-    std::vector<int> get_candidates(int row, int col);
-
-    [[maybe_unused]] std::vector<int> get_candidates(cell_address address);
+    inline std::bitset<9> get_candidates(int row, int col);
+    inline std::bitset<9> get_candidates(cell_address address);
 
     bool update_candidates(int row, int col);
     bool update_candidates(cell_address address);

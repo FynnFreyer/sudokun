@@ -93,15 +93,13 @@ std::vector<cell_address> Sudoku::get_codependent_addresses(cell_address address
     return get_codependent_addresses(address.row, address.col);
 }
 
-std::vector<int> Sudoku::get_candidates(int row, int col) {
-    vector<int> candidates;
-
-    for (int i = 0; i < data[row][col].size(); i++) if (data[row][col].test(i)) candidates.push_back(i + 1);
-
+std::bitset<9> Sudoku::get_candidates(int row, int col) {
+    bitset<9> candidates = data[row][col];
+    if (candidates.none()) throw 1;
     return candidates;
 }
 
-[[maybe_unused]] std::vector<int> Sudoku::get_candidates(cell_address address) {
+std::bitset<9> Sudoku::get_candidates(cell_address address) {
     return get_candidates(address.row, address.col);
 }
 
@@ -137,7 +135,7 @@ bool Sudoku::update_candidates(int row, int col) {
         // therefore we check whether the value of the comparison cell is known
         if (is_known(c)) {
             // the inverse of the codependent bitset leaves all those candidates, that are not excluded yet
-            bitset not_excluded = ~data[c.row][c.col];
+            bitset not_excluded = ~get_candidates(c);
             // if we use it as a bitmask we can exclude the taken values with a bitwise and
             bitset still_possible = data[row][col] & not_excluded;
             // if there is a difference between what we have in our candidates, and what's possible
