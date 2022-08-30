@@ -7,6 +7,7 @@
 #include "utils.hpp"
 
 using namespace std;
+namespace po = boost::program_options;
 
 void print_usage(char* name, const po::options_description& opts_desc) {
     cout << "Usage: " << name << " [options] <input>\n\n";
