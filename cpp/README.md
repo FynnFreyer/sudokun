@@ -70,7 +70,11 @@ But it's still so embarrassing, that I'm considering reimplementing the Python v
     - docstrings (doxygen?)
 - finish up readme
     - approach
-- implement tests
+- implement unit tests
+- start outputting solved sudokus, once they are computed
+  - reverse the vector, from which we pop, so we work "in order"
+  - have a default value in the output array, that we wait on
+  - once the default value gets replaced, we output
 - guess, when you don't get improvements from logical closures
   - we notice when no further improvement is made, by checking the updated var that's no problem
   - we have to remember our active guesses (maybe a stack)
