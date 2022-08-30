@@ -179,6 +179,9 @@ bool Sudoku::update_candidates(int row, int col) {
         }
     }
 
+    // TODO potential for "backpropagation":
+    //  when a number is set, it can automatically be dismissed from all codependent cells
+
     return updated;
 }
 
@@ -195,8 +198,8 @@ void Sudoku::solve() {
         for (cell_address c: unknown_cells)
             updated |= update_candidates(c);
         // we were not able to do any further updates, so we abort
+        // TODO this is were we would start guessing
         if (!updated) break;
-
     } while (!unknown_cells.empty());
 }
 
