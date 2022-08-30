@@ -13,6 +13,7 @@ using namespace std;
 
 vector<string> read_sudoku_file(const string& file) {
     vector<string> sudokus;
+
     ifstream input_file_stream(file);
     if (input_file_stream.is_open()) {
         string line;
@@ -51,11 +52,11 @@ void do_work(vector<string>& sudokus, string solved[]) {
         sudoku.solve();
 
         // write the solution to the array of solved sudokus
-        string solution = sudoku.to_string();
-        solved[i] = solution;
+        solved[i] = sudoku.to_string();
 
     } while (true);
 }
+
 vector<string> crunch(vector<string>& sudokus) {
     // because the threads pop from the vector, we need to remember the size at the start
     int sudokus_total = sudokus.size();
